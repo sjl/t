@@ -61,6 +61,12 @@ def _prefixes(ids):
 
 
 class TaskDict(object):
+    """A set tasks, both finished and unfinished for a given list.
+    
+    The list's files are read from disk when the TaskDict is initialized. They
+    can be written back out to disk with the write() function.
+    
+    """
     def __init__(self, taskdir='.', name='tasks'):
         """Initialize by reading the task files, if they exist."""
         self.tasks = {}
