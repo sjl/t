@@ -60,7 +60,7 @@ class TaskDict(object):
         self.taskdir = taskdir
         filemap = (('tasks', self.name), ('done', '.%s.done' % self.name))
         for kind, filename in filemap:
-            path = os.path.join(os.path.realpath(self.taskdir), filename)
+            path = os.path.join(os.path.expanduser(self.taskdir), filename)
             if os.path.isdir(path):
                 raise InvalidTaskfile
             if os.path.exists(path):
@@ -77,7 +77,7 @@ class TaskDict(object):
     def write(self):
         filemap = (('tasks', self.name), ('done', '.%s.done' % self.name))
         for kind, filename in filemap:
-            path = os.path.join(os.path.realpath(self.taskdir), filename)
+            path = os.path.join(os.path.expanduser(self.taskdir), filename)
             if os.path.isdir(path):
                 raise InvalidTaskfile
             with open(path, 'w') as tfile:
