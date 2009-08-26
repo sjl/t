@@ -15,13 +15,13 @@ _hash = lambda s: hashlib.sha1(s).hexdigest()
 
 def _task_from_taskline(taskline):
     """Parse a taskline (from a task file) and return a task.
-
+    
     A taskline should be in the format:
-
+    
         summary text ... | meta1:meta1_value,meta2:meta2_value,...
-
+    
     The task returned will be a dictionary such as:
-
+    
         { 'id': <hash id>,
           'text': <summary text>,
            ... other metadata ... }
@@ -36,10 +36,10 @@ def _task_from_taskline(taskline):
 
 def _prefixes(ids):
     """return a mapping of ids to prefixes
-
+    
     Each prefix will be the shortest possible substring of the ID that
     can uniquely identify it among the given group of IDs.
-
+    
     """
     
     prefixes = {}
@@ -71,7 +71,7 @@ class TaskDict(object):
     def add_task(self, text):
         id = _hash(text)
         self.tasks[id] = {'id': id, 'text': text}
-
+    
     def write(self):
         filemap = (('tasks', self.name), ('done', '.%s.done' % self.name))
         for kind, filename in filemap:
@@ -102,10 +102,10 @@ class TaskDict(object):
             self.done[task['id']] = task
         else:
             raise AmbiguousPrefix
-
+    
     def delete_finished(self):
         self.done = {}
-
+    
 
 def build_parser():
     parser = OptionParser()
@@ -128,20 +128,21 @@ def build_parser():
                       help="print more detailed output (full task ids, etc)")
     return parser
 
-(options, args) = build_parser().parse_args()
-
-td = TaskDict(options.name)
-text = ' '.join(args)
-
-if options.finish:
-    td.finish_task(options.finish)
-    td.write()
-elif options.delete_finished:
-    td.delete_finished()
-    td.write()
-elif text:
-    td.add_task(text)
-    td.write()
-else:
-    td.print_list(verbose=options.verbose)
+if __name__ == '__main__':
+    (options, args) = build_parser().parse_args()
+    
+    td = TaskDict(options.name)
+    text = ' '.join(args)
+    
+    if options.finish:
+        td.finish_task(options.finish)
+        td.write()
+    elif options.delete_finished:
+        td.delete_finished()
+        td.write()
+    elif text:
+        td.add_task(text)
+        td.write()
+    else:
+        td.print_list(verbose=options.verbose)
 
