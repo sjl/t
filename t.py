@@ -53,16 +53,18 @@ def _prefixes(ids):
     return prefixes
 
 class TaskDict(object):
-    def __init__(self, name='tasks'):
+    def __init__(self, taskdir='.', name='tasks'):
         self.tasks = {}
         self.done = {}
         self.name = name
+        self.taskdir = taskdir
         filemap = (('tasks', self.name), ('done', '.%s.done' % self.name))
         for kind, filename in filemap:
-            if os.path.isdir(filename):
+            path = os.path.join(os.path.realpath(self.taskdir), filename)
+            if os.path.isdir(path):
                 raise InvalidTaskfile
-            if os.path.exists(filename):
-                with open(filename, 'r') as tfile:
+            if os.path.exists(path):
+                with open(path, 'r') as tfile:
                     tls = [tl.strip() for tl in tfile.xreadlines() if tl]
                     tasks = map(_task_from_taskline, tls)
                     for task in tasks:
@@ -75,9 +77,10 @@ class TaskDict(object):
     def write(self):
         filemap = (('tasks', self.name), ('done', '.%s.done' % self.name))
         for kind, filename in filemap:
-            if os.path.isdir(filename):
+            path = os.path.join(os.path.realpath(self.taskdir), filename)
+            if os.path.isdir(path):
                 raise InvalidTaskfile
-            with open(filename, 'w') as tfile:
+            with open(path, 'w') as tfile:
                 tasks = getattr(self, kind).values()
                 tasks.sort(key=operator.itemgetter('id'))
                 for task in tasks:
@@ -109,20 +112,27 @@ class TaskDict(object):
 
 def build_parser():
     parser = OptionParser()
+    
     parser.add_option("-a", "--add",
                       action="store_true", dest="add", default=True,
                       help="add the text as a task (default)")
+    
     parser.add_option("-e", "--edit", dest="edit",
                       help="edit TASK", metavar="TASK")
+    
     parser.add_option("-f", "--finish", dest="finish",
                       help="mark TASK as finished", metavar="TASK")
+    
     parser.add_option("-l", "--list", dest="name", default="tasks",
                       help="work on LIST", metavar="LIST")
-    parser.add_option("-t", "--task-dir", dest="name",
+    
+    parser.add_option("-t", "--task-dir", dest="taskdir", default="",
                       help="work in DIR", metavar="DIR")
+    
     parser.add_option("-D", "--delete-finished", dest="delete_finished",
                       action="store_true", default=False,
                       help="delete finished items to save space")
+    
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=False,
                       help="print more detailed output (full task ids, etc)")
@@ -131,7 +141,7 @@ def build_parser():
 if __name__ == '__main__':
     (options, args) = build_parser().parse_args()
     
-    td = TaskDict(options.name)
+    td = TaskDict(taskdir=options.taskdir, name=options.name)
     text = ' '.join(args)
     
     if options.finish:
