@@ -7,11 +7,14 @@ from optparse import OptionParser
 
 
 class InvalidTaskfile(Exception):
-    pass
-class AmbiguousPrefix(Exception):
+    """Raised when the path to a task file already exists as a directory."""
     pass
 
-_hash = lambda s: hashlib.sha1(s).hexdigest()
+class AmbiguousPrefix(Exception):
+    """Raised when trying to use a prefix that could identify multiple tasks."""
+    pass
+
+
 def _hash(s):
     """Return a hash of the given string for use as an id.
     
@@ -61,7 +64,7 @@ def _prefixes(ids):
 
 
 class TaskDict(object):
-    """A set tasks, both finished and unfinished for a given list.
+    """A set of tasks, both finished and unfinished, for a given list.
     
     The list's files are read from disk when the TaskDict is initialized. They
     can be written back out to disk with the write() function.
@@ -134,6 +137,7 @@ class TaskDict(object):
                     meta_str = ', '.join('%s:%s' % m for m in meta)
                     tfile.write('%s | %s\n' % (task['text'], meta_str))
     
+
 
 def build_parser():
     parser = OptionParser()
