@@ -2,7 +2,7 @@
 
 from __future__ import with_statement
 
-import os, sys, hashlib, operator
+import os, hashlib, operator
 from optparse import OptionParser
 
 
