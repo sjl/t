@@ -12,6 +12,13 @@ class AmbiguousPrefix(Exception):
     pass
 
 _hash = lambda s: hashlib.sha1(s).hexdigest()
+def _hash(s):
+    """Return a hash of the given string for use as an id.
+    
+    Currently SHA1 hashing is used.  It should be plenty for our purposes.
+    
+    """
+    return hashlib.sha1(s).hexdigest()
 
 def _task_from_taskline(taskline):
     """Parse a taskline (from a task file) and return a task.
@@ -35,7 +42,7 @@ def _task_from_taskline(taskline):
     return task
 
 def _prefixes(ids):
-    """return a mapping of ids to prefixes
+    """Return a mapping of ids to prefixes.
     
     Each prefix will be the shortest possible substring of the ID that
     can uniquely identify it among the given group of IDs.
@@ -52,8 +59,10 @@ def _prefixes(ids):
                 break
     return prefixes
 
+
 class TaskDict(object):
     def __init__(self, taskdir='.', name='tasks'):
+        """Initialize by reading the task files, if they exist."""
         self.tasks = {}
         self.done = {}
         self.name = name
@@ -71,10 +80,12 @@ class TaskDict(object):
                         getattr(self, kind)[task['id']] = task
     
     def add_task(self, text):
+        """Add a new, unfinished task with the given summary text."""
         id = _hash(text)
         self.tasks[id] = {'id': id, 'text': text}
     
     def write(self):
+        """Flush the finished and unfinished tasks to the files on disk."""
         filemap = (('tasks', self.name), ('done', '.%s.done' % self.name))
         for kind, filename in filemap:
             path = os.path.join(os.path.expanduser(self.taskdir), filename)
@@ -89,6 +100,7 @@ class TaskDict(object):
                     tfile.write('%s | %s\n' % (task['text'], meta_str))
     
     def print_list(self, kind='tasks', verbose=False):
+        """Print out a nicely formatted list of unfinished tasks."""
         tasks = dict(getattr(self, kind).items())
         label = 'prefix' if not verbose else 'id'
         if not verbose:
@@ -99,6 +111,12 @@ class TaskDict(object):
             print ('%-' + str(plen) + 's - %s') % (t[label], t['text'])
     
     def finish_task(self, prefix):
+        """Mark the task with the given prefix as finished.
+        
+        If more than one task matches the prefix an AmbiguousPrefix exception
+        will be raised.
+        
+        """
         matched = filter(lambda id: id.startswith(prefix), self.tasks.keys())
         if len(matched) == 1:
             task = self.tasks.pop(matched[0])
@@ -107,6 +125,7 @@ class TaskDict(object):
             raise AmbiguousPrefix
     
     def delete_finished(self):
+        """Remove all finished tasks."""
         self.done = {}
     
 
@@ -137,6 +156,7 @@ def build_parser():
                       action="store_true", dest="verbose", default=False,
                       help="print more detailed output (full task ids, etc)")
     return parser
+
 
 if __name__ == '__main__':
     (options, args) = build_parser().parse_args()
