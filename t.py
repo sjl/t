@@ -157,8 +157,7 @@ def build_parser():
                       help="print more detailed output (full task ids, etc)")
     return parser
 
-
-if __name__ == '__main__':
+def _main():
     (options, args) = build_parser().parse_args()
     
     td = TaskDict(taskdir=options.taskdir, name=options.name)
@@ -176,3 +175,6 @@ if __name__ == '__main__':
     else:
         td.print_list(verbose=options.verbose)
 
+
+if __name__ == '__main__':
+    _main()
