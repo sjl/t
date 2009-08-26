@@ -90,21 +90,6 @@ class TaskDict(object):
         id = _hash(text)
         self.tasks[id] = {'id': id, 'text': text}
     
-    def write(self):
-        """Flush the finished and unfinished tasks to the files on disk."""
-        filemap = (('tasks', self.name), ('done', '.%s.done' % self.name))
-        for kind, filename in filemap:
-            path = os.path.join(os.path.expanduser(self.taskdir), filename)
-            if os.path.isdir(path):
-                raise InvalidTaskfile
-            with open(path, 'w') as tfile:
-                tasks = getattr(self, kind).values()
-                tasks.sort(key=operator.itemgetter('id'))
-                for task in tasks:
-                    meta = [m for m in task.items() if m[0] != 'text']
-                    meta_str = ', '.join('%s:%s' % m for m in meta)
-                    tfile.write('%s | %s\n' % (task['text'], meta_str))
-    
     def print_list(self, kind='tasks', verbose=False):
         """Print out a nicely formatted list of unfinished tasks."""
         tasks = dict(getattr(self, kind).items())
@@ -133,6 +118,21 @@ class TaskDict(object):
     def delete_finished(self):
         """Remove all finished tasks."""
         self.done = {}
+    
+    def write(self):
+        """Flush the finished and unfinished tasks to the files on disk."""
+        filemap = (('tasks', self.name), ('done', '.%s.done' % self.name))
+        for kind, filename in filemap:
+            path = os.path.join(os.path.expanduser(self.taskdir), filename)
+            if os.path.isdir(path):
+                raise InvalidTaskfile
+            with open(path, 'w') as tfile:
+                tasks = getattr(self, kind).values()
+                tasks.sort(key=operator.itemgetter('id'))
+                for task in tasks:
+                    meta = [m for m in task.items() if m[0] != 'text']
+                    meta_str = ', '.join('%s:%s' % m for m in meta)
+                    tfile.write('%s | %s\n' % (task['text'], meta_str))
     
 
 def build_parser():
