@@ -13,17 +13,16 @@ class InvalidTaskfile(Exception):
 class AmbiguousPrefix(Exception):
     """Raised when trying to use a prefix that could identify multiple tasks."""
     def __init__(self, prefix):
-        super(Exception, self).__init__()
+        super(AmbiguousPrefix, self).__init__()
         self.prefix = prefix
     
 
 class UnknownPrefix(Exception):
     """Raised when trying to use a prefix that does not match any tasks."""
     def __init__(self, prefix):
-        super(Exception, self).__init__()
+        super(UnknownPrefix, self).__init__()
         self.prefix = prefix
     
-
 
 def _hash(s):
     """Return a hash of the given string for use as an id.
