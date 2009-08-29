@@ -61,12 +61,12 @@ def _prefixes(ids):
     
     """
     prefixes = {}
-    for id in ids:
-        others = set(ids).difference([id])
-        for i in range(1, len(id)+1):
-            prefix = id[:i]
+    for task_id in ids:
+        others = set(ids).difference([task_id])
+        for i in range(1, len(task_id)+1):
+            prefix = task_id[:i]
             if not any(map(lambda o: o.startswith(prefix), others)):
-                prefixes[id] = prefix
+                prefixes[task_id] = prefix
                 break
     return prefixes
 
