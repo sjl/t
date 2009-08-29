@@ -161,7 +161,7 @@ class TaskDict(object):
     
 
 
-def build_parser():
+def _build_parser():
     parser = OptionParser()
     
     parser.add_option("-a", "--add",
@@ -190,7 +190,7 @@ def build_parser():
     return parser
 
 def _main():
-    (options, args) = build_parser().parse_args()
+    (options, args) = _build_parser().parse_args()
     
     td = TaskDict(taskdir=options.taskdir, name=options.name)
     text = ' '.join(args).strip()
