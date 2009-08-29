@@ -24,13 +24,13 @@ class UnknownPrefix(Exception):
         self.prefix = prefix
     
 
-def _hash(s):
-    """Return a hash of the given string for use as an id.
+def _hash(text):
+    """Return a hash of the given text for use as an id.
     
     Currently SHA1 hashing is used.  It should be plenty for our purposes.
     
     """
-    return hashlib.sha1(s).hexdigest()
+    return hashlib.sha1(text).hexdigest()
 
 def _task_from_taskline(taskline):
     """Parse a taskline (from a task file) and return a task.
