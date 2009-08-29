@@ -90,16 +90,16 @@ class TaskDict(object):
     
     def add_task(self, text):
         """Add a new, unfinished task with the given summary text."""
-        id = _hash(text)
-        self.tasks[id] = {'id': id, 'text': text}
+        task_id = _hash(text)
+        self.tasks[task_id] = {'id': task_id, 'text': text}
     
     def print_list(self, kind='tasks', verbose=False):
         """Print out a nicely formatted list of unfinished tasks."""
         tasks = dict(getattr(self, kind).items())
         label = 'prefix' if not verbose else 'id'
         if not verbose:
-            for id, prefix in _prefixes(tasks).items():
-                tasks[id]['prefix'] = prefix
+            for task_id, prefix in _prefixes(tasks).items():
+                tasks[task_id]['prefix'] = prefix
         plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
         for t in tasks.values():
             print ('%-' + str(plen) + 's - %s') % (t[label], t['text'])
@@ -111,7 +111,7 @@ class TaskDict(object):
         will be raised.
         
         """
-        matched = filter(lambda id: id.startswith(prefix), self.tasks.keys())
+        matched = filter(lambda tid: tid.startswith(prefix), self.tasks.keys())
         if len(matched) == 1:
             task = self.tasks.pop(matched[0])
             self.done[task['id']] = task
