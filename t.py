@@ -26,6 +26,7 @@ class UnknownPrefix(Exception):
         self.prefix = prefix
     
 
+
 def _hash(text):
     """Return a hash of the given text for use as an id.
     
