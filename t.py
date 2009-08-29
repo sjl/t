@@ -120,6 +120,15 @@ class TaskDict(object):
         
         task['text'] = text
     
+    def finish_task(self, prefix):
+        """Mark the task with the given prefix as finished.
+        
+        If more than one task matches the prefix an AmbiguousPrefix exception
+        will be raised.
+        
+        """
+        self.tasks.pop(self[prefix]['id'])
+    
     def print_list(self, kind='tasks', verbose=False):
         """Print out a nicely formatted list of unfinished tasks."""
         tasks = dict(getattr(self, kind).items())
@@ -130,15 +139,6 @@ class TaskDict(object):
         plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
         for t in tasks.values():
             print ('%-' + str(plen) + 's - %s') % (t[label], t['text'])
-    
-    def finish_task(self, prefix):
-        """Mark the task with the given prefix as finished.
-        
-        If more than one task matches the prefix an AmbiguousPrefix exception
-        will be raised.
-        
-        """
-        self.tasks.pop(self[prefix]['id'])
     
     def delete_finished(self):
         """Remove all finished tasks."""
