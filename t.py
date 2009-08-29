@@ -175,6 +175,7 @@ class TaskDict(object):
 
 
 def _build_parser():
+    """Return a parser for the command-line interface."""
     parser = OptionParser()
     
     parser.add_option("-a", "--add",
@@ -203,6 +204,7 @@ def _build_parser():
     return parser
 
 def _main():
+    """Run the command-line interface."""
     (options, args) = _build_parser().parse_args()
     
     td = TaskDict(taskdir=options.taskdir, name=options.name)
