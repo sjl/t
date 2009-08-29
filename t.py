@@ -14,6 +14,10 @@ class AmbiguousPrefix(Exception):
     """Raised when trying to use a prefix that could identify multiple tasks."""
     pass
 
+class UnknownPrefix(Exception):
+    """Raised when trying to use a prefix that does not match any tasks."""
+    pass
+
 
 def _hash(s):
     """Return a hash of the given string for use as an id.
@@ -91,12 +95,15 @@ class TaskDict(object):
         """Return the unfinished task with the given prefix.
         
         If more than one task matches the prefix an AmbiguousPrefix exception
-        will be raised.
+        will be raised, if no tasks match it an UnknownPrefix exception will
+        be raised.
         
         """
         matched = filter(lambda tid: tid.startswith(prefix), self.tasks.keys())
         if len(matched) == 1:
             return self.tasks[matched[0]]
+        elif len(matched) == 0:
+            raise UnknownPrefix
         else:
             raise AmbiguousPrefix
     
@@ -109,7 +116,8 @@ class TaskDict(object):
         """Edit the task with the given prefix.
         
         If more than one task matches the prefix an AmbiguousPrefix exception
-        will be raised.
+        will be raised, if no tasks match it an UnknownPrefix exception will
+        be raised.
         
         """
         task = self[prefix]
@@ -124,7 +132,8 @@ class TaskDict(object):
         """Mark the task with the given prefix as finished.
         
         If more than one task matches the prefix an AmbiguousPrefix exception
-        will be raised.
+        will be raised, if no tasks match it an UnknownPrefix exception will
+        be raised.
         
         """
         self.tasks.pop(self[prefix]['id'])
