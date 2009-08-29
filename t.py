@@ -88,6 +88,19 @@ class TaskDict(object):
                     for task in tasks:
                         getattr(self, kind)[task['id']] = task
     
+    def __getitem__(self, prefix):
+        """Return the unfinished task with the given prefix.
+        
+        If more than one task matches the prefix an AmbiguousPrefix exception
+        will be raised.
+        
+        """
+        matched = filter(lambda tid: tid.startswith(prefix), self.tasks.keys())
+        if len(matched) == 1:
+            return self.tasks[matched[0]]
+        else:
+            raise AmbiguousPrefix
+    
     def add_task(self, text):
         """Add a new, unfinished task with the given summary text."""
         task_id = _hash(text)
@@ -111,12 +124,7 @@ class TaskDict(object):
         will be raised.
         
         """
-        matched = filter(lambda tid: tid.startswith(prefix), self.tasks.keys())
-        if len(matched) == 1:
-            task = self.tasks.pop(matched[0])
-            self.done[task['id']] = task
-        else:
-            raise AmbiguousPrefix
+        self.tasks.pop(self[prefix]['id'])
     
     def delete_finished(self):
         """Remove all finished tasks."""
