@@ -2,7 +2,7 @@
 
 from __future__ import with_statement
 
-import os, hashlib, operator
+import os, re, hashlib, operator
 from optparse import OptionParser
 
 
@@ -51,7 +51,6 @@ def _prefixes(ids):
     can uniquely identify it among the given group of IDs.
     
     """
-    
     prefixes = {}
     for id in ids:
         others = set(ids).difference([id])
@@ -106,6 +105,21 @@ class TaskDict(object):
         task_id = _hash(text)
         self.tasks[task_id] = {'id': task_id, 'text': text}
     
+    def edit_task(self, prefix, text):
+        """Edit the task with the given prefix.
+        
+        If more than one task matches the prefix an AmbiguousPrefix exception
+        will be raised.
+        
+        """
+        task = self[prefix]
+        if text.startswith('s/') or text.startswith('/'):
+            text = text.lstrip('s/').strip('/')
+            find, _, repl = text.partition('/')
+            text = re.sub(find, repl, task['text'])
+        
+        task['text'] = text
+    
     def print_list(self, kind='tasks', verbose=False):
         """Print out a nicely formatted list of unfinished tasks."""
         tasks = dict(getattr(self, kind).items())
@@ -154,7 +168,7 @@ def build_parser():
                       action="store_true", dest="add", default=True,
                       help="add the text as a task (default)")
     
-    parser.add_option("-e", "--edit", dest="edit",
+    parser.add_option("-e", "--edit", dest="edit", default="",
                       help="edit TASK", metavar="TASK")
     
     parser.add_option("-f", "--finish", dest="finish",
@@ -179,13 +193,16 @@ def _main():
     (options, args) = build_parser().parse_args()
     
     td = TaskDict(taskdir=options.taskdir, name=options.name)
-    text = ' '.join(args)
+    text = ' '.join(args).strip()
     
     if options.finish:
         td.finish_task(options.finish)
         td.write()
     elif options.delete_finished:
         td.delete_finished()
+        td.write()
+    elif options.edit:
+        td.edit_task(options.edit, text)
         td.write()
     elif text:
         td.add_task(text)
