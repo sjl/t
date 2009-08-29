@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+"""t is for people that want do things, not organize their tasks."""
+
 from __future__ import with_statement
 
 import os, re, sys, hashlib, operator
@@ -49,8 +51,8 @@ def _task_from_taskline(taskline):
     text, _, meta = taskline.partition('|')
     task = {'text': text.strip()}
     for piece in meta.strip().split(','):
-        k, v = piece.split(':')
-        task[k.strip()] = v.strip()
+        label, data = piece.split(':')
+        task[label.strip()] = data.strip()
     return task
 
 def _prefixes(ids):
@@ -151,8 +153,8 @@ class TaskDict(object):
             for task_id, prefix in _prefixes(tasks).items():
                 tasks[task_id]['prefix'] = prefix
         plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
-        for t in tasks.values():
-            print ('%-' + str(plen) + 's - %s') % (t[label], t['text'])
+        for task in tasks.values():
+            print ('%-' + str(plen) + 's - %s') % (task[label], task['text'])
     
     def delete_finished(self):
         """Remove all finished tasks."""
