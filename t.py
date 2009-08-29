@@ -2,7 +2,7 @@
 
 from __future__ import with_statement
 
-import os, re, hashlib, operator
+import os, re, sys, hashlib, operator
 from optparse import OptionParser
 
 
@@ -12,11 +12,15 @@ class InvalidTaskfile(Exception):
 
 class AmbiguousPrefix(Exception):
     """Raised when trying to use a prefix that could identify multiple tasks."""
-    pass
+    def __init__(self, prefix):
+        self.prefix = prefix
+    
 
 class UnknownPrefix(Exception):
     """Raised when trying to use a prefix that does not match any tasks."""
-    pass
+    def __init__(self, prefix):
+        self.prefix = prefix
+    
 
 
 def _hash(s):
@@ -103,9 +107,9 @@ class TaskDict(object):
         if len(matched) == 1:
             return self.tasks[matched[0]]
         elif len(matched) == 0:
-            raise UnknownPrefix
+            raise UnknownPrefix(prefix)
         else:
-            raise AmbiguousPrefix
+            raise AmbiguousPrefix(prefix)
     
     def add_task(self, text):
         """Add a new, unfinished task with the given summary text."""
@@ -204,20 +208,25 @@ def _main():
     td = TaskDict(taskdir=options.taskdir, name=options.name)
     text = ' '.join(args).strip()
     
-    if options.finish:
-        td.finish_task(options.finish)
-        td.write()
-    elif options.delete_finished:
-        td.delete_finished()
-        td.write()
-    elif options.edit:
-        td.edit_task(options.edit, text)
-        td.write()
-    elif text:
-        td.add_task(text)
-        td.write()
-    else:
-        td.print_list(verbose=options.verbose)
+    try:
+        if options.finish:
+            td.finish_task(options.finish)
+            td.write()
+        elif options.delete_finished:
+            td.delete_finished()
+            td.write()
+        elif options.edit:
+            td.edit_task(options.edit, text)
+            td.write()
+        elif text:
+            td.add_task(text)
+            td.write()
+        else:
+            td.print_list(verbose=options.verbose)
+    except AmbiguousPrefix, e:
+        sys.stderr.write('The ID "%s" matches more than one task.' % e.prefix)
+    except UnknownPrefix, e:
+        sys.stderr.write('The ID "%s" does not match any task.' % e.prefix)
 
 
 if __name__ == '__main__':
