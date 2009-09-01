@@ -144,7 +144,8 @@ class TaskDict(object):
         be raised.
         
         """
-        self.tasks.pop(self[prefix]['id'])
+        task = self.tasks.pop(self[prefix]['id'])
+        self.done[task['id']] = task
     
     def print_list(self, kind='tasks', verbose=False):
         """Print out a nicely formatted list of unfinished tasks."""
