@@ -140,6 +140,18 @@ Counting your tasks is simple using the `wc` program:
           2
     $
 
+### Put Your Task Count in Your Bash Prompt
+
+Want a count of your tasks right in your prompt?  Edit your `~/.bashrc` file:
+
+    export PS1="[$(t | wc -l | sed -e's/ *//')] $PS1"
+
+Now you've got a prompt that looks something like this:
+
+    [2] $ t -f 30
+    [1] $ t Feed the cat.
+    [2] $
+
 ### Multiple Lists
 
 `t` is for people that want to *do* tasks, not organize them.  With that said, sometimes it's useful to be able to have at least *one* level of organization.  To split up your tasks into different lists you can add a few more aliases:
