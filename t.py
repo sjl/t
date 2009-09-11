@@ -5,7 +5,7 @@
 from __future__ import with_statement
 
 import os, re, sys, hashlib, operator
-from optparse import OptionParser
+from optparse import OptionParser, OptionGroup
 
 
 class InvalidTaskfile(Exception):
@@ -147,16 +147,19 @@ class TaskDict(object):
         task = self.tasks.pop(self[prefix]['id'])
         self.done[task['id']] = task
     
-    def print_list(self, kind='tasks', verbose=False):
+    def print_list(self, kind='tasks', verbose=False, quiet=False):
         """Print out a nicely formatted list of unfinished tasks."""
         tasks = dict(getattr(self, kind).items())
         label = 'prefix' if not verbose else 'id'
+        
         if not verbose:
             for task_id, prefix in _prefixes(tasks).items():
                 tasks[task_id]['prefix'] = prefix
+        
         plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
         for task in tasks.values():
-            print ('%-' + str(plen) + 's - %s') % (task[label], task['text'])
+            p = (('%-' + str(plen) + 's - ') % task[label]) if not quiet else ''
+            print p + task['text']
     
     def write(self):
         """Flush the finished and unfinished tasks to the files on disk."""
@@ -177,23 +180,33 @@ class TaskDict(object):
 
 def _build_parser():
     """Return a parser for the command-line interface."""
-    parser = OptionParser()
+    usage = "Usage: %prog [-d DIR] [-l LIST] [options] [TEXT]"
+    parser = OptionParser(usage=usage)
     
-    parser.add_option("-e", "--edit", dest="edit", default="",
-                      help="edit TASK", metavar="TASK")
+    actions = OptionGroup(parser, "Actions",
+        "If no actions are specified the TEXT will be added as a new task.")
+    actions.add_option("-e", "--edit", dest="edit", default="",
+                       help="edit TASK to contain TEXT", metavar="TASK")
+    actions.add_option("-f", "--finish", dest="finish",
+                       help="mark TASK as finished", metavar="TASK")
+    parser.add_option_group(actions)
     
-    parser.add_option("-f", "--finish", dest="finish",
-                      help="mark TASK as finished", metavar="TASK")
-    
-    parser.add_option("-l", "--list", dest="name", default="tasks",
+    config = OptionGroup(parser, "Configuration Options")
+    config.add_option("-l", "--list", dest="name", default="tasks",
                       help="work on LIST", metavar="LIST")
+    config.add_option("-t", "--task-dir", dest="taskdir", default="",
+                      help="work on the lists in DIR", metavar="DIR")
+    parser.add_option_group(config)
     
-    parser.add_option("-t", "--task-dir", dest="taskdir", default="",
-                      help="work in DIR", metavar="DIR")
-    
-    parser.add_option("-v", "--verbose",
+    output = OptionGroup(parser, "Output Options")
+    output.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=False,
                       help="print more detailed output (full task ids, etc)")
+    output.add_option("-q", "--quiet",
+                      action="store_true", dest="quiet", default=False,
+                      help="print less detailed output (no task ids, etc)")
+    parser.add_option_group(output)
+    
     return parser
 
 def _main():
@@ -214,7 +227,7 @@ def _main():
             td.add_task(text)
             td.write()
         else:
-            td.print_list(verbose=options.verbose)
+            td.print_list(verbose=options.verbose, quiet=options.quiet)
     except AmbiguousPrefix, e:
         sys.stderr.write('The ID "%s" matches more than one task.' % e.prefix)
     except UnknownPrefix, e:
