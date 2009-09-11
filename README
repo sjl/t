@@ -18,9 +18,13 @@ Yeah, I know, *another* command line todo list manager.  Several others already 
 
 Todo.txt and TaskWarrior are feature-packed.  They let you tag tasks, split them into projects, set priorities, order them, color-code them, and much more.
 
-*That's* the problem.  It's easy to say "I'll just organize my todo list a bit" and spend 15 minutes tagging your tasks.  In those 15 minutes you probably could have *finished* a couple of them.
+**That's the problem.**
 
-`t` was inspired by [j][].  It's simple, has almost no features, messy, and extremely effective at the one thing it does.  With `t` the only way to make your todo list prettier is to *finish some damn tasks*.
+It's easy to say "I'll just organize my todo list a bit" and spend 15 minutes tagging your tasks.  In those 15 minutes you probably could have *finished* a couple of them.
+
+`t` was inspired by [j][].  It's simple, messy, has almost no features, and is extremely effective at the one thing it does.  With `t` the only way to make your todo list prettier is to **finish some damn tasks**.
+
+[j]: http://github.com/rupa/j2/
 
 ### It's Flexible
 
