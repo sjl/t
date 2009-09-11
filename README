@@ -70,12 +70,7 @@ Finally, set up an alias to run `t`.  Put something like this in your `~/.bashrc
 
     alias t='python ~/path/to/t.py --task-dir ~/tasks --list tasks'
 
-If you'd like to create a couple of extra aliases for splitting up your tasks into different lists, you can do that too:
-
-    alias g='python ~/path/to/t.py --task-dir ~/tasks --list groceries'
-    alias m='python ~/path/to/t.py --task-dir ~/tasks --list music-to-buy'
-
-Make sure you run `source ~/.bashrc` or restart your terminal window to make the aliases take effect.
+Make sure you run `source ~/.bashrc` or restart your terminal window to make the alias take effect.
 
 Using t
 -------
@@ -130,3 +125,29 @@ Yes, nerds, you can use sed-style substitution strings:
     9  - Buy a lot more beer.
     30 - Clean the entire apartment.
     $
+
+
+Tips and Tricks
+---------------
+
+`t` might be simple, but it can do a lot of interesting things.
+
+### Multiple Lists
+
+`t` is for people that want to *do* tasks, not organize them.  With that said, sometimes it's useful to be able to have at least *one* level of organization.  To split up your tasks into different lists you can add a few more aliases:
+
+    alias g='python ~/path/to/t.py --task-dir ~/tasks --list groceries'
+    alias m='python ~/path/to/t.py --task-dir ~/tasks --list music-to-buy'
+    alias w='python ~/path/to/t.py --task-dir ~/tasks --list wines-to-try'
+
+### Distributed Bugtracking
+
+Like the idea of distributed bug trackers like [BugsEverywhere][], but don't want to use such a heavyweight system?  You can use `t` instead.
+
+Add another alias to your `~/.bashrc` file:
+
+    alias b='python ~/path/to/t.py --task-dir . --list bugs'
+
+Now when you're in your project directory you can use `b` to manage the list of bugs/tasks for that project.  Add the `bugs` file to version control and you're all set.
+
+Even people without `t` installed can view the bug list, because it's plain text.
