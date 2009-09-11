@@ -53,9 +53,7 @@ However, some of them append new tasks to the end of the file when you create th
 Installing t
 ------------
 
-`t` requires [Python][] 2.5 or newer, and some form of UNIX-like shell (bash works well).
-
-It works on Linux, OS X, and Windows (with [Cygwin][]).
+`t` requires [Python][] 2.5 or newer, and some form of UNIX-like shell (bash works well).  It works on Linux, OS X, and Windows (with [Cygwin][]).
 
 [Python]: http://python.org/
 [Cygwin]: http://www.cygwin.com/
@@ -100,7 +98,7 @@ Listing your tasks is even easier -- just use `t`:
     31 - Write chapter 10 of the novel.
     $
 
-`t` will list all of the unfinished tasks and their IDs.
+`t` will list all of your unfinished tasks and their IDs.
 
 ### Finish a Task
 
