@@ -1,0 +1,45 @@
+-*- markdown -*-
+
+t
+=======
+
+`t` is a command line todo list manager for people that want to *finish* tasks, not organize them.
+
+Why t?
+------
+
+Yeah, I know, *another* command line todo list manager.  Several others already exist ([todo.txt][] and [TaskWarrior][] come to mind), so why make another one?
+
+[todo.txt]: http://ginatrapani.github.com/todo.txt-cli/
+[TaskWarrior]: http://taskwarrior.org/projects/show/taskwarrior/
+
+### It Does the Simplest Thing That Could Possibly Work
+
+Todo.txt and TaskWarrior are feature-packed.  They let you tag tasks, split them into projects, set priorities, order them, color-code them, and much more.
+
+*That's* the problem.  It's easy to say "I'll just organize my todo list a bit" and spend 15 minutes tagging your tasks.  In those 15 minutes you probably could have *finished* a couple of them.
+
+`t` was inspired by [j][].  It's simple, has almost no features, messy, and extremely effective at the one thing it does.  With `t` the only way to make your todo list prettier is to *finish some damn tasks*.
+
+### It's Flexible
+
+`t`'s simplicity makes it extremely flexible.
+
+Want to edit a bunch of tasks at once?  Open the list in a text editor.
+
+Want to view the lists on a computer that doesn't have `t` installed?  Open the list in a text editor.
+
+Want to synchronize the list across a couple of computers?  Keep your task lists in a [Dropbox][] folder.
+
+Want to use it as a distributed bug tracking system like [BugsEverywhere][]?  Make the task list a `bugs` file in the project repository.
+
+[Dropbox]: https://www.getdropbox.com/
+[BugsEverywhere]: http://bugseverywhere.org/
+
+### It Plays Nice with Version Control
+
+Other systems keep your tasks in a plain text file.  This is a good thing, and `t` follows their lead.
+
+However, some of them append new tasks to the end of the file when you create them.  This is not good if you're using a version control system to let more than one person edit a todo list.  If two people add a task and then try to merge, they'll get a conflict and have to resolve it manually.
+
+`t` uses random IDs (actually SHA1 hashes) to order the todo list files.  Once the list has a couple of tasks in it, adding more is far less likely to cause a merge conflict because the list is sorted.
