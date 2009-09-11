@@ -5,6 +5,7 @@ t
 
 `t` is a command line todo list manager for people that want to *finish* tasks, not organize them.
 
+
 Why t?
 ------
 
@@ -43,3 +44,89 @@ Other systems keep your tasks in a plain text file.  This is a good thing, and `
 However, some of them append new tasks to the end of the file when you create them.  This is not good if you're using a version control system to let more than one person edit a todo list.  If two people add a task and then try to merge, they'll get a conflict and have to resolve it manually.
 
 `t` uses random IDs (actually SHA1 hashes) to order the todo list files.  Once the list has a couple of tasks in it, adding more is far less likely to cause a merge conflict because the list is sorted.
+
+
+Installing t
+------------
+
+`t` requires [Python][] 2.5 or newer, and some form of UNIX-like shell (bash works well).
+
+It works on Linux, OS X, and Windows (with [Cygwin][]).
+
+[Python]: http://python.org/
+[Cygwin]: http://www.cygwin.com/
+
+Installing and setting up `t` will take about one minute.
+
+First, [download][] the newest version or clone the Mercurial repository ( `hg clone http://bitbucket.org/sjl/t/` ).  Put it anywhere you like.
+
+[download]: http://bitbucket.org/sjl/t/get/tip.zip
+
+Next, decide where you want to keep your todo lists.  I put mine in `~/tasks`.  Create that directory:
+
+    mkdir ~/tasks
+
+Finally, set up an alias to run `t`.  Put something like this in your `~/.bashrc` file:
+
+    alias t='python ~/path/to/t.py --task-dir ~/tasks --list tasks'
+
+If you'd like to create a couple of extra aliases for splitting up your tasks into different lists, you can do that too:
+
+    alias g='python ~/path/to/t.py --task-dir ~/tasks --list groceries'
+    alias m='python ~/path/to/t.py --task-dir ~/tasks --list music-to-buy'
+
+Make sure you run `source ~/.bashrc` or restart your terminal window to make the aliases take effect.
+
+Using t
+-------
+
+`t` is quick and easy to use.
+
+### Add a Task
+
+To add a task, use `t [task description]`:
+
+    $ t Clean the apartment.
+    $ t Write chapter 10 of the novel.
+    $ t Buy more beer.
+    $
+
+### List Your Tasks
+
+Listing your tasks is even easier -- just use `t`:
+
+    $ t
+    9  - Buy more beer.
+    30 - Clean the apartment.
+    31 - Write chapter 10 of the novel.
+    $
+
+`t` will list all of the unfinished tasks and their IDs.
+
+### Finish a Task
+
+After you're done with something, use `t -f ID` to finish it:
+
+    $ t -f 31
+    $ t
+    9  - Buy more beer.
+    30 - Clean the apartment.
+    $
+
+### Edit a Task
+
+Sometimes you might want to change the wording of a task.  You can use `t -e ID [new description]` to do that:
+
+    $ t -e 30 Clean the entire apartment.
+    $ t
+    9  - Buy more beer.
+    30 - Clean the entire apartment.
+    $
+
+Yes, nerds, you can use sed-style substitution strings:
+
+    $ t -e 9 /more/a lot more/
+    $ t
+    9  - Buy a lot more beer.
+    30 - Clean the entire apartment.
+    $
