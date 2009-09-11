@@ -158,10 +158,6 @@ class TaskDict(object):
         for task in tasks.values():
             print ('%-' + str(plen) + 's - %s') % (task[label], task['text'])
     
-    def delete_finished(self):
-        """Remove all finished tasks."""
-        self.done = {}
-    
     def write(self):
         """Flush the finished and unfinished tasks to the files on disk."""
         filemap = (('tasks', self.name), ('done', '.%s.done' % self.name))
@@ -183,10 +179,6 @@ def _build_parser():
     """Return a parser for the command-line interface."""
     parser = OptionParser()
     
-    parser.add_option("-a", "--add",
-                      action="store_true", dest="add", default=True,
-                      help="add the text as a task (default)")
-    
     parser.add_option("-e", "--edit", dest="edit", default="",
                       help="edit TASK", metavar="TASK")
     
@@ -198,10 +190,6 @@ def _build_parser():
     
     parser.add_option("-t", "--task-dir", dest="taskdir", default="",
                       help="work in DIR", metavar="DIR")
-    
-    parser.add_option("-D", "--delete-finished", dest="delete_finished",
-                      action="store_true", default=False,
-                      help="delete finished items to save space")
     
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=False,
@@ -218,9 +206,6 @@ def _main():
     try:
         if options.finish:
             td.finish_task(options.finish)
-            td.write()
-        elif options.delete_finished:
-            td.delete_finished()
             td.write()
         elif options.edit:
             td.edit_task(options.edit, text)
