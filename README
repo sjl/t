@@ -3,13 +3,13 @@
 t
 =======
 
-`t` is a command line todo list manager for people that want to *finish* tasks, not organize them.
+`t` is a command-line todo list manager for people that want to *finish* tasks, not organize them.
 
 
 Why t?
 ------
 
-Yeah, I know, *another* command line todo list manager.  Several others already exist ([todo.txt][] and [TaskWarrior][] come to mind), so why make another one?
+Yeah, I know, *another* command-line todo list manager.  Several others already exist ([todo.txt][] and [TaskWarrior][] come to mind), so why make another one?
 
 [todo.txt]: http://ginatrapani.github.com/todo.txt-cli/
 [TaskWarrior]: http://taskwarrior.org/projects/show/taskwarrior/
