@@ -62,6 +62,9 @@ def _prefixes(ids):
     Each prefix will be the shortest possible substring of the ID that
     can uniquely identify it among the given group of IDs.
     
+    If an ID of one task is entirely a substring of another task's ID, the
+    entire ID will be the prefix.
+    
     """
     prefixes = {}
     for task_id in ids:
@@ -71,6 +74,7 @@ def _prefixes(ids):
             if not any(map(lambda o: o.startswith(prefix), others)):
                 prefixes[task_id] = prefix
                 break
+            prefixes[task_id] = task_id
     return prefixes
 
 
@@ -103,8 +107,9 @@ class TaskDict(object):
         """Return the unfinished task with the given prefix.
         
         If more than one task matches the prefix an AmbiguousPrefix exception
-        will be raised, if no tasks match it an UnknownPrefix exception will
-        be raised.
+        will be raised, unless the prefix is the entire ID of one task.
+        
+        If no tasks match the prefix an UnknownPrefix exception will be raised.
         
         """
         matched = filter(lambda tid: tid.startswith(prefix), self.tasks.keys())
@@ -113,7 +118,11 @@ class TaskDict(object):
         elif len(matched) == 0:
             raise UnknownPrefix(prefix)
         else:
-            raise AmbiguousPrefix(prefix)
+            matched = filter(lambda tid: tid == prefix, self.tasks.keys())
+            if len(matched) == 1:
+                return self.tasks[matched[0]]
+            else:
+                raise AmbiguousPrefix(prefix)
     
     def add_task(self, text):
         """Add a new, unfinished task with the given summary text."""
