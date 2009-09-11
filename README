@@ -132,6 +132,14 @@ Tips and Tricks
 
 `t` might be simple, but it can do a lot of interesting things.
 
+### Count Your Tasks
+
+Counting your tasks is simple using the `wc` program:
+
+    $ t | wc -l
+          2
+    $
+
 ### Multiple Lists
 
 `t` is for people that want to *do* tasks, not organize them.  With that said, sometimes it's useful to be able to have at least *one* level of organization.  To split up your tasks into different lists you can add a few more aliases:
@@ -151,3 +159,16 @@ Add another alias to your `~/.bashrc` file:
 Now when you're in your project directory you can use `b` to manage the list of bugs/tasks for that project.  Add the `bugs` file to version control and you're all set.
 
 Even people without `t` installed can view the bug list, because it's plain text.
+
+
+Problems, Contributions, Etc
+----------------------------
+
+`t` was hacked together in a couple of nights to fit my needs.  If you use it and find a bug, please let me know.
+
+If you want to request a feature feel free, but remember that `t` is meant to be simple.  If you need anything beyond the basics you might want to look at [todo.txt][] or [TaskWarrior][] instead.  They're great tools with lots of bells and whistles.
+
+If you want to contribute code to `t`, that's great!  Fork the [Mercurial repository][] on BitBucket or the [git mirror][] on GitHub and send me a pull request.
+
+[Mercurial repository]: http://bitbucket.org/sjl/t/
+[git mirror]: http://github.com/sjl/t/
