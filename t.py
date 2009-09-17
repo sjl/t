@@ -50,7 +50,7 @@ def _task_from_taskline(taskline):
     
     """
     text, _, meta = taskline.partition('|')
-    task = {'text': text.strip()}
+    task = { 'text': text.strip() }
     for piece in meta.strip().split(','):
         label, data = piece.split(':')
         task[label.strip()] = data.strip()
@@ -98,7 +98,7 @@ class TaskDict(object):
                 raise InvalidTaskfile
             if os.path.exists(path):
                 with open(path, 'r') as tfile:
-                    tls = [tl.strip() for tl in tfile.xreadlines() if tl]
+                    tls = [tl.strip() for tl in tfile if tl]
                     tasks = map(_task_from_taskline, tls)
                     for task in tasks:
                         getattr(self, kind)[task['id']] = task
@@ -133,8 +133,9 @@ class TaskDict(object):
         """Edit the task with the given prefix.
         
         If more than one task matches the prefix an AmbiguousPrefix exception
-        will be raised, if no tasks match it an UnknownPrefix exception will
-        be raised.
+        will be raised, unless the prefix is the entire ID of one task.
+        
+        If no tasks match the prefix an UnknownPrefix exception will be raised.
         
         """
         task = self[prefix]
@@ -167,7 +168,7 @@ class TaskDict(object):
         
         plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
         for task in tasks.values():
-            p = (('%-' + str(plen) + 's - ') % task[label]) if not quiet else ''
+            p = '%s - ' % task[label].ljust(plen) if not quiet else ''
             print p + task['text']
     
     def write(self):
@@ -179,8 +180,7 @@ class TaskDict(object):
                 raise InvalidTaskfile
             with open(path, 'w') as tfile:
                 tasks = getattr(self, kind).values()
-                tasks.sort(key=operator.itemgetter('id'))
-                for task in tasks:
+                for task in sorted(tasks, key=operator.itemgetter('id')):
                     meta = [m for m in task.items() if m[0] != 'text']
                     meta_str = ', '.join('%s:%s' % m for m in meta)
                     tfile.write('%s | %s\n' % (task['text'], meta_str))
