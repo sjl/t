@@ -139,7 +139,7 @@ class TaskDict(object):
         """
         task = self[prefix]
         if text.startswith('s/') or text.startswith('/'):
-            text = text.lstrip('s/').strip('/')
+            text = re.sub('^s?/', '', text).rstrip('/')
             find, _, repl = text.partition('/')
             text = re.sub(find, repl, task['text'])
         
