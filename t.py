@@ -171,7 +171,7 @@ class TaskDict(object):
         task = self.tasks.pop(self[prefix]['id'])
         self.done[task['id']] = task
     
-    def print_list(self, kind='tasks', verbose=False, quiet=False):
+    def print_list(self, kind='tasks', verbose=False, quiet=False, grep=''):
         """Print out a nicely formatted list of unfinished tasks."""
         tasks = dict(getattr(self, kind).items())
         label = 'prefix' if not verbose else 'id'
@@ -182,8 +182,9 @@ class TaskDict(object):
         
         plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
         for task in tasks.values():
-            p = '%s - ' % task[label].ljust(plen) if not quiet else ''
-            print p + task['text']
+            if grep.lower() in task['text'].lower():
+                p = '%s - ' % task[label].ljust(plen) if not quiet else ''
+                print p + task['text']
     
     def write(self):
         """Flush the finished and unfinished tasks to the files on disk."""
@@ -220,6 +221,8 @@ def _build_parser():
     parser.add_option_group(config)
     
     output = OptionGroup(parser, "Output Options")
+    output.add_option("-g", "--grep", dest="grep", default='',
+                      help="print only tasks that contain WORD", metavar="WORD")
     output.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=False,
                       help="print more detailed output (full task ids, etc)")
@@ -248,7 +251,8 @@ def _main():
             td.add_task(text)
             td.write()
         else:
-            td.print_list(verbose=options.verbose, quiet=options.quiet)
+            td.print_list(verbose=options.verbose, quiet=options.quiet,
+                          grep=options.grep)
     except AmbiguousPrefix, e:
         sys.stderr.write('The ID "%s" matches more than one task.' % e.prefix)
     except UnknownPrefix, e:
