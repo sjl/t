@@ -4,7 +4,8 @@
 
 from __future__ import with_statement
 
-import os, re, sys, hashlib, operator
+import os, re, sys, hashlib
+from operator import itemgetter
 from optparse import OptionParser, OptionGroup
 
 
@@ -55,6 +56,19 @@ def _task_from_taskline(taskline):
         label, data = piece.split(':')
         task[label.strip()] = data.strip()
     return task
+
+def _tasklines_from_tasks(tasks):
+    """Parse a list of tasks into tasklines suitable for writing."""
+    
+    tasklines = []
+    tlen = max(map(lambda t: len(t['text']), tasks))
+    
+    for task in tasks:
+        meta = [m for m in task.items() if m[0] != 'text']
+        meta_str = ', '.join('%s:%s' % m for m in meta)
+        tasklines.append('%s | %s\n' % (task['text'].ljust(tlen), meta_str))
+    
+    return tasklines
 
 def _prefixes(ids):
     """Return a mapping of ids to prefixes.
@@ -179,11 +193,9 @@ class TaskDict(object):
             if os.path.isdir(path):
                 raise InvalidTaskfile
             with open(path, 'w') as tfile:
-                tasks = getattr(self, kind).values()
-                for task in sorted(tasks, key=operator.itemgetter('id')):
-                    meta = [m for m in task.items() if m[0] != 'text']
-                    meta_str = ', '.join('%s:%s' % m for m in meta)
-                    tfile.write('%s | %s\n' % (task['text'], meta_str))
+                tasks = sorted(getattr(self, kind).values(), key=itemgetter('id'))
+                for taskline in _tasklines_from_tasks(tasks):
+                    tfile.write(taskline)
     
 
 
