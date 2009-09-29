@@ -61,7 +61,7 @@ def _tasklines_from_tasks(tasks):
     """Parse a list of tasks into tasklines suitable for writing."""
     
     tasklines = []
-    tlen = max(map(lambda t: len(t['text']), tasks))
+    tlen = max(map(lambda t: len(t['text']), tasks)) if tasks else 0
     
     for task in tasks:
         meta = [m for m in task.items() if m[0] != 'text']
