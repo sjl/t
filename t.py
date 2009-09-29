@@ -49,12 +49,19 @@ def _task_from_taskline(taskline):
           'text': <summary text>,
            ... other metadata ... }
     
+    A taskline can also consist of only summary text, in which case the id
+    and other metadata will be generated when the line is read.  This is
+    supported to enable editing of the taskfile with a simple text editor.
     """
-    text, _, meta = taskline.partition('|')
-    task = { 'text': text.strip() }
-    for piece in meta.strip().split(','):
-        label, data = piece.split(':')
-        task[label.strip()] = data.strip()
+    if '|' in taskline:
+        text, _, meta = taskline.partition('|')
+        task = { 'text': text.strip() }
+        for piece in meta.strip().split(','):
+            label, data = piece.split(':')
+            task[label.strip()] = data.strip()
+    else:
+        text = taskline.strip()
+        task = { 'id': _hash(text), 'text': text }
     return task
 
 def _tasklines_from_tasks(tasks):
