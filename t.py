@@ -193,17 +193,20 @@ class TaskDict(object):
                 p = '%s - ' % task[label].ljust(plen) if not quiet else ''
                 print p + task['text']
     
-    def write(self):
+    def write(self, delete_if_empty=False):
         """Flush the finished and unfinished tasks to the files on disk."""
         filemap = (('tasks', self.name), ('done', '.%s.done' % self.name))
         for kind, filename in filemap:
             path = os.path.join(os.path.expanduser(self.taskdir), filename)
             if os.path.isdir(path):
                 raise InvalidTaskfile
-            with open(path, 'w') as tfile:
-                tasks = sorted(getattr(self, kind).values(), key=itemgetter('id'))
-                for taskline in _tasklines_from_tasks(tasks):
-                    tfile.write(taskline)
+            tasks = sorted(getattr(self, kind).values(), key=itemgetter('id'))
+            if tasks or not delete_if_empty:
+                with open(path, 'w') as tfile:
+                    for taskline in _tasklines_from_tasks(tasks):
+                        tfile.write(taskline)
+            elif not tasks and os.path.isfile(path):
+                os.remove(path)
     
 
 
@@ -225,6 +228,9 @@ def _build_parser():
                       help="work on LIST", metavar="LIST")
     config.add_option("-t", "--task-dir", dest="taskdir", default="",
                       help="work on the lists in DIR", metavar="DIR")
+    config.add_option("-d", "--delete-if-empty",
+                      action="store_true", dest="delete", default=False,
+                      help="delete the task file if it becomes empty")
     parser.add_option_group(config)
     
     output = OptionGroup(parser, "Output Options")
@@ -250,13 +256,13 @@ def _main():
     try:
         if options.finish:
             td.finish_task(options.finish)
-            td.write()
+            td.write(options.delete)
         elif options.edit:
             td.edit_task(options.edit, text)
-            td.write()
+            td.write(options.delete)
         elif text:
             td.add_task(text)
-            td.write()
+            td.write(options.delete)
         else:
             td.print_list(verbose=options.verbose, quiet=options.quiet,
                           grep=options.grep)

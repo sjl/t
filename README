@@ -128,6 +128,11 @@ Yes, nerds, you can use sed-style substitution strings:
     30 - Clean the entire apartment.
     $
 
+### Delete the Task List if it's Empty
+
+If you keep your task list in a visible place (like your desktop) you might want it to be deleted if there are no tasks in it.  To do this automatically you can use the `--delete-if-empty` option in your alias:
+
+    alias t='python ~/path/to/t.py --task-dir ~/Desktop --list todo.txt --delete-if-empty'
 
 Tips and Tricks
 ---------------
