@@ -78,25 +78,45 @@ def _tasklines_from_tasks(tasks):
     return tasklines
 
 def _prefixes(ids):
-    """Return a mapping of ids to prefixes.
+    """Return a mapping of ids to prefixes in O(n) time.
+    
+    This is much faster than the naitive t function, which
+    takes O(n^2) time.
     
     Each prefix will be the shortest possible substring of the ID that
     can uniquely identify it among the given group of IDs.
     
     If an ID of one task is entirely a substring of another task's ID, the
     entire ID will be the prefix.
-    
     """
-    prefixes = {}
-    for task_id in ids:
-        others = set(ids).difference([task_id])
-        for i in range(1, len(task_id)+1):
-            prefix = task_id[:i]
-            if not any(map(lambda o: o.startswith(prefix), others)):
-                prefixes[task_id] = prefix
+    pre = {}
+    for id in ids:
+        id_len = len(id)
+        for i in range(1, id_len+1):
+            """ identifies an empty prefix slot, or a singular collision """
+            prefix = id[:i]
+            if (not prefix in pre) or (pre[prefix] != ':' and prefix != pre[prefix]):
                 break
-            prefixes[task_id] = task_id
-    return prefixes
+        if prefix in pre:
+            """ if there is a collision """
+            collide = pre[prefix]
+            for j in range(i,id_len+1):
+                if collide[:j] == id[:j]:
+                    pre[id[:j]] = ':'
+                else:
+                    pre[collide[:j]] = collide
+                    pre[id[:j]] = id
+                    break
+            else:
+                pre[collide[:id_len+1]] = collide
+                pre[id] = id
+        else:
+            """ no collision, can safely add """
+            pre[prefix] = id
+    pre = dict(zip(pre.values(),pre.keys()))
+    if ':' in pre:
+        del pre[':']
+    return pre
 
 
 class TaskDict(object):
