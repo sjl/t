@@ -14,7 +14,7 @@ Test paddings:
   5 - Short.
   $ cat test
   Longcat is long. | id:4c623ab4df5cc1a10d32558768c2c21bddf2c053
-  Short.           | id:5a7a65db2caa6313a70ceb75b1bd806f7879f6b7
+  Short. | id:5a7a65db2caa6313a70ceb75b1bd806f7879f6b7
   $ cat >> test << EOF
   > Long one. | id: long1
   > Very long two. | id: long2
@@ -26,5 +26,5 @@ Test paddings:
   long2 - Very long two.
   $ cat test
   Longcat is long. | id:4c623ab4df5cc1a10d32558768c2c21bddf2c053
-  Long one.        | id:long1
-  Very long two.   | id:long2
+  Long one. | id:long1
+  Very long two. | id:long2
