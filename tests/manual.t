@@ -9,17 +9,17 @@ Create a task file manually (no IDs):
   > Sample two.
   > EOF
   $ xt
-  7 - Sample two.
   3 - Sample one.
+  7 - Sample two.
 
 Add some manual tasks:
 
   $ echo 'Custom one. | id: custom1' >> test
   $ echo 'Custom two. | id: custom2' >> test
   $ xt
+  3       - Sample one.
   7       - Sample two.
   custom1 - Custom one.
-  3       - Sample one.
   custom2 - Custom two.
 
 Rewrite the task file:

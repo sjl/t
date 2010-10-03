@@ -10,8 +10,8 @@ Adding tasks:
   3 - Sample one.
   $ xt Sample two.
   $ xt
-  7 - Sample two.
   3 - Sample one.
+  7 - Sample two.
 
 Finishing tasks:
 

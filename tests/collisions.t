@@ -20,19 +20,19 @@ Make some tasks that collide in their first letter:
   $ xt 14
   $ xt
   0  - 9
-  3  - 1
-  1b - 4
-  7b - 12
-  fe - 8
-  bd - 13
-  77 - 3
-  c  - 6
-  9  - 7
-  b1 - 10
-  a  - 5
-  fa - 14
   17 - 11
+  1b - 4
+  3  - 1
+  77 - 3
+  7b - 12
+  9  - 7
+  a  - 5
+  b1 - 10
+  bd - 13
+  c  - 6
   d  - 2
+  fa - 14
+  fe - 8
 
 Even more ambiguity:
 
@@ -51,32 +51,32 @@ Even more ambiguity:
   $ xt 13test
   $ xt 14test
   $ xt
+  07  - 8test
   0a  - 9
+  0e  - 9test
+  14  - 6test
+  17  - 11
+  1b  - 4
+  2   - 5test
+  35  - 1
+  36  - 4test
+  5   - 2test
+  6   - 11test
+  77  - 3
+  7b  - 12
+  8   - 12test
+  90  - 7
+  95  - 3test
+  a1  - 7test
+  ac  - 5
+  b10 - 10test
+  b1d - 10
   bd  - 13
+  c1  - 6
+  c7  - 13test
   d   - 2
   ee  - 1test
-  fe  - 8
-  77  - 3
-  2   - 5test
-  14  - 6test
-  35  - 1
-  90  - 7
-  8   - 12test
-  b1d - 10
-  17  - 11
-  a1  - 7test
-  7b  - 12
-  c7  - 13test
-  07  - 8test
-  36  - 4test
-  6   - 11test
-  0e  - 9test
-  b10 - 10test
-  95  - 3test
-  fa  - 14
-  1b  - 4
   ef  - 14test
-  5   - 2test
-  c1  - 6
-  ac  - 5
+  fa  - 14
+  fe  - 8
 
