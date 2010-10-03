@@ -80,9 +80,6 @@ def _tasklines_from_tasks(tasks):
 def _prefixes(ids):
     """Return a mapping of ids to prefixes in O(n) time.
     
-    This is much faster than the naitive t function, which
-    takes O(n^2) time.
-    
     Each prefix will be the shortest possible substring of the ID that
     can uniquely identify it among the given group of IDs.
     
