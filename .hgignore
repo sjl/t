@@ -2,3 +2,4 @@ syntax: glob
 *.pyc
 .DS_Store
 *.un~
+tags
