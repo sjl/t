@@ -89,34 +89,34 @@ def _prefixes(ids):
     If an ID of one task is entirely a substring of another task's ID, the
     entire ID will be the prefix.
     """
-    pre = {}
+    ps = {}
     for id in ids:
         id_len = len(id)
         for i in range(1, id_len+1):
-            """ identifies an empty prefix slot, or a singular collision """
+            # identifies an empty prefix slot, or a singular collision
             prefix = id[:i]
-            if (not prefix in pre) or (pre[prefix] != ':' and prefix != pre[prefix]):
+            if (not prefix in ps) or (ps[prefix] and prefix != ps[prefix]):
                 break
-        if prefix in pre:
-            """ if there is a collision """
-            collide = pre[prefix]
-            for j in range(i,id_len+1):
-                if collide[:j] == id[:j]:
-                    pre[id[:j]] = ':'
+        if prefix in ps:
+            # if there is a collision
+            other_id = ps[prefix]
+            for j in range(i, id_len+1):
+                if other_id[:j] == id[:j]:
+                    ps[id[:j]] = ''
                 else:
-                    pre[collide[:j]] = collide
-                    pre[id[:j]] = id
+                    ps[other_id[:j]] = other_id
+                    ps[id[:j]] = id
                     break
             else:
-                pre[collide[:id_len+1]] = collide
-                pre[id] = id
+                ps[other_id[:id_len+1]] = other_id
+                ps[id] = id
         else:
-            """ no collision, can safely add """
-            pre[prefix] = id
-    pre = dict(zip(pre.values(),pre.keys()))
-    if ':' in pre:
-        del pre[':']
-    return pre
+            # no collision, can safely add
+            ps[prefix] = id
+    ps = dict(zip(ps.values(), ps.keys()))
+    if '' in ps:
+        del ps['']
+    return ps
 
 
 class TaskDict(object):

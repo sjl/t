@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''
 Test the prefix generating method of t vs my bug program
 
@@ -35,55 +36,7 @@ def t_prefixes(ids):
 #
 # New t Prefix
 #
-def new_prefixes(ids):
-    """Return a mapping of ids to prefixes in O(n) time.
-    
-    This is much faster than the naitive t function, which
-    takes O(n^2) time.
-    
-    Each prefix will be the shortest possible substring of the ID that
-    can uniquely identify it among the given group of IDs.
-    
-    If an ID of one task is entirely a substring of another task's ID, the
-    entire ID will be the prefix.
-    """
-    pre = {}
-    for id in ids:
-        #print(id)
-        id_len = len(id)
-        for i in range(1, id_len+1):
-            """ identifies an empty prefix slot, or a singular collision """
-            prefix = id[:i]
-            #print (pre)
-            #print (prefix)
-            if (not prefix in pre) or (pre[prefix] != ':' and prefix != pre[prefix]):
-                break
-        #print (prefix)
-        #print ("--")
-        if prefix in pre:
-            """ if there is a collision """
-            collide = pre[prefix]
-            for j in range(i,id_len+1):
-                if collide[:j] == id[:j]:
-                    pre[id[:j]] = ':'
-                else:
-                    pre[collide[:j]] = collide
-                    pre[id[:j]] = id
-                    break
-            else:
-                pre[collide[:id_len+1]] = collide
-                pre[id] = id
-        else:
-            """ no collision, can safely add """
-            pre[prefix] = id
-        #print("Additional")
-        #print(pre)
-        #print("\n***\n")
-    pre = dict(zip(pre.values(),pre.keys()))
-    if ':' in pre:
-        del pre[':']
-    return pre
-
+from t import _prefixes as new_prefixes
 #
 # Test the prefix methods
 #
@@ -133,7 +86,7 @@ def check_prefixes(size=1000):
     ids = _gen_ids(size)
     _check_prefixes(t_prefixes(ids),new_prefixes(ids))
 
-def speed_check(base=10,max_pow=7,size_limit=5000):
+def speed_check(base=10,max_pow=4,size_limit=5000):
     for i in range(max_pow):
         size = int(math.pow(base,i))
         print("-----\n\nSize: %s\n" % size)
@@ -149,5 +102,5 @@ def speed_check(base=10,max_pow=7,size_limit=5000):
         print("new_prefixes()")
         cProfile.run("new_prefixes(ids)")
 
-#check_prefixes()
+check_prefixes()
 speed_check()
