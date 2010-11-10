@@ -3,3 +3,6 @@ syntax: glob
 .DS_Store
 *.un~
 tags
+build
+dist
+t.egg-info
