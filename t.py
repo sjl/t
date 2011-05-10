@@ -225,7 +225,7 @@ class TaskDict(object):
 
 def _build_parser():
     """Return a parser for the command-line interface."""
-    usage = "Usage: %prog [-d DIR] [-l LIST] [options] [TEXT]"
+    usage = "Usage: %prog [-t DIR] [-l LIST] [options] [TEXT]"
     parser = OptionParser(usage=usage)
 
     actions = OptionGroup(parser, "Actions",
