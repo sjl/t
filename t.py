@@ -51,7 +51,9 @@ def _task_from_taskline(taskline):
     and other metadata will be generated when the line is read.  This is
     supported to enable editing of the taskfile with a simple text editor.
     """
-    if '|' in taskline:
+    if taskline.strip().startswith('#'):
+        return None
+    elif '|' in taskline:
         text, _, meta = taskline.partition('|')
         task = { 'text': text.strip() }
         for piece in meta.strip().split(','):
@@ -136,7 +138,8 @@ class TaskDict(object):
                     tls = [tl.strip() for tl in tfile if tl]
                     tasks = map(_task_from_taskline, tls)
                     for task in tasks:
-                        getattr(self, kind)[task['id']] = task
+                        if task is not None:
+                            getattr(self, kind)[task['id']] = task
 
     def __getitem__(self, prefix):
         """Return the unfinished task with the given prefix.
