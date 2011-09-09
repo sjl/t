@@ -192,6 +192,17 @@ class TaskDict(object):
         task = self.tasks.pop(self[prefix]['id'])
         self.done[task['id']] = task
 
+    def remove_task(self, prefix):
+        """Remove the task from tasks list.
+
+        If more than one task matches the prefix an AmbiguousPrefix exception
+        will be raised, if no tasks match it an UnknownPrefix exception will
+        be raised.
+
+        """
+        task = self.tasks.pop(self[prefix]['id'])
+
+
     def print_list(self, kind='tasks', verbose=False, quiet=False, grep=''):
         """Print out a nicely formatted list of unfinished tasks."""
         tasks = dict(getattr(self, kind).items())
@@ -234,6 +245,8 @@ def _build_parser():
                        help="edit TASK to contain TEXT", metavar="TASK")
     actions.add_option("-f", "--finish", dest="finish",
                        help="mark TASK as finished", metavar="TASK")
+    actions.add_option("-r", "--remove", dest="remove",
+                       help="Remove TASK from list", metavar="TASK")
     parser.add_option_group(actions)
 
     config = OptionGroup(parser, "Configuration Options")
@@ -270,6 +283,9 @@ def _main():
         if options.finish:
             td.finish_task(options.finish)
             td.write(options.delete)
+        elif options.remove:
+            td.remove_task(options.remove)
+            td.write(options.delete)
         elif options.edit:
             td.edit_task(options.edit, text)
             td.write(options.delete)
@@ -280,9 +296,9 @@ def _main():
             td.print_list(verbose=options.verbose, quiet=options.quiet,
                           grep=options.grep)
     except AmbiguousPrefix, e:
-        sys.stderr.write('The ID "%s" matches more than one task.' % e.prefix)
+        sys.stderr.write('The ID "%s" matches more than one task.\n' % e.prefix)
     except UnknownPrefix, e:
-        sys.stderr.write('The ID "%s" does not match any task.' % e.prefix)
+        sys.stderr.write('The ID "%s" does not match any task.\n' % e.prefix)
 
 
 if __name__ == '__main__':
