@@ -217,14 +217,20 @@ class TaskDict(object):
             for task_id, prefix in _prefixes(tasks).items():
                 tasks[task_id]['prefix'] = prefix
 
+        sorted_tasks = sorted(tasks.items())
+
         plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
         if track_time:
             tl = 'add_ts'
             for task in tasks.values():
                 task['time'] = _format_time(task[tl]) if tl in task else ''
             tlen = max(len(t['time']) for t in tasks.values())
+            sorted_tasks = sorted(
+                sorted_tasks,
+                key=lambda i: int(i[1][tl]) if tl in i[1] else 0,
+                reverse=True)
 
-        for _, task in sorted(tasks.items()):
+        for _, task in sorted_tasks:
             if grep.lower() in task['text'].lower():
                 p = '%s - ' % task[label].ljust(plen) if not quiet else ''
                 if track_time and tlen:
