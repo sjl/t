@@ -203,7 +203,7 @@ class TaskDict(object):
         be raised.
 
         """
-        task = self.tasks.pop(self[prefix]['id'])
+        self.tasks.pop(self[prefix]['id'])
 
 
     def print_list(self, kind='tasks', verbose=False, quiet=False, grep=''):
