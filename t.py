@@ -221,7 +221,7 @@ class TaskDict(object):
 
         plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
         if track_time:
-            tl = 'add_ts'
+            tl = 'add_ts' if kind == 'tasks' else 'finish_ts'
             for task in tasks.values():
                 task['time'] = _format_time(task[tl]) if tl in task else ''
             tlen = max(len(t['time']) for t in tasks.values())
