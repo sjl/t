@@ -30,3 +30,8 @@ Rewrite the task file:
   $ xt
   5 - New.
 
+Add comments to task file:
+
+  $ echo '# this is a comment' >> test
+  $ xt
+  5 - New.
