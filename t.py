@@ -52,7 +52,7 @@ def _task_from_taskline(taskline):
     supported to enable editing of the taskfile with a simple text editor.
     """
     if '|' in taskline:
-        text, _, meta = taskline.partition('|')
+        text, _, meta = taskline.rpartition('|')
         task = { 'text': text.strip() }
         for piece in meta.strip().split(','):
             label, data = piece.split(':')
