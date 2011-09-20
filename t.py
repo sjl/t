@@ -255,6 +255,9 @@ def _build_parser():
     output.add_option("-q", "--quiet",
                       action="store_true", dest="quiet", default=False,
                       help="print less detailed output (no task ids, etc)")
+    output.add_option("--done",
+                      action="store_true", dest="done", default=False,
+                      help="list done tasks instead of unfinished ones")
     parser.add_option_group(output)
 
     return parser
@@ -277,7 +280,8 @@ def _main():
             td.add_task(text)
             td.write(options.delete)
         else:
-            td.print_list(verbose=options.verbose, quiet=options.quiet,
+            kind = 'tasks' if not options.done else 'done'
+            td.print_list(kind=kind, verbose=options.verbose, quiet=options.quiet,
                           grep=options.grep)
     except AmbiguousPrefix, e:
         sys.stderr.write('The ID "%s" matches more than one task.' % e.prefix)
