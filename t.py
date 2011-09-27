@@ -183,6 +183,7 @@ class TaskDict(object):
             text = re.sub(find, repl, task['text'])
 
         task['text'] = text
+        task['id'] = _hash(text)
 
     def finish_task(self, prefix):
         """Mark the task with the given prefix as finished.
