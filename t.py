@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 """t is for people that want do things, not organize their tasks."""
 
