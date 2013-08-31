@@ -134,12 +134,15 @@ class TaskDict(object):
             if os.path.isdir(path):
                 raise InvalidTaskfile
             if os.path.exists(path):
-                with open(path, 'r') as tfile:
-                    tls = [tl.strip() for tl in tfile if tl]
-                    tasks = map(_task_from_taskline, tls)
-                    for task in tasks:
-                        if task is not None:
-                            getattr(self, kind)[task['id']] = task
+		try:
+	                with open(path, 'r') as tfile:
+        	            tls = [tl.strip() for tl in tfile if tl]
+                	    tasks = map(_task_from_taskline, tls)
+	                    for task in tasks:
+        	                if task is not None:
+                	            getattr(self, kind)[task['id']] = task
+		except IOError as e:
+			sys.exit(e.strerror + ' - ' + path)
 
     def __getitem__(self, prefix):
         """Return the unfinished task with the given prefix.
@@ -230,9 +233,13 @@ class TaskDict(object):
                 raise InvalidTaskfile
             tasks = sorted(getattr(self, kind).values(), key=itemgetter('id'))
             if tasks or not delete_if_empty:
-                with open(path, 'w') as tfile:
-                    for taskline in _tasklines_from_tasks(tasks):
-                        tfile.write(taskline)
+		try:
+        	        with open(path, 'w') as tfile:
+       	        	    for taskline in _tasklines_from_tasks(tasks):
+				tfile.write(taskline)
+		except IOError as e:
+			sys.exit(e.strerror + ' - ' + path)
+
             elif not tasks and os.path.isfile(path):
                 os.remove(path)
 
