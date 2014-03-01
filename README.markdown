@@ -12,7 +12,7 @@ Yeah, I know, *another* command-line todo list manager.  Several others already
 exist ([todo.txt][] and [TaskWarrior][] come to mind), so why make another one?
 
 [todo.txt]: http://ginatrapani.github.com/todo.txt-cli/
-[TaskWarrior]: http://taskwarrior.org/projects/show/taskwarrior/
+[TaskWarrior]: http://taskwarrior.org/
 
 ### It Does the Simplest Thing That Could Possibly Work
 
