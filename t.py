@@ -4,7 +4,10 @@
 
 from __future__ import with_statement
 
-import os, re, sys, hashlib
+import os
+import re
+import sys
+import hashlib
 from operator import itemgetter
 from optparse import OptionParser, OptionGroup
 
@@ -13,11 +16,15 @@ class InvalidTaskfile(Exception):
     """Raised when the path to a task file already exists as a directory."""
     pass
 
+
 class AmbiguousPrefix(Exception):
-    """Raised when trying to use a prefix that could identify multiple tasks."""
+    """
+    Raised when trying to use a prefix that could identify multiple tasks.
+    """
     def __init__(self, prefix):
         super(AmbiguousPrefix, self).__init__()
         self.prefix = prefix
+
 
 class UnknownPrefix(Exception):
     """Raised when trying to use a prefix that does not match any tasks."""
@@ -33,6 +40,7 @@ def _hash(text):
 
     """
     return hashlib.sha1(text).hexdigest()
+
 
 def _task_from_taskline(taskline):
     """Parse a taskline (from a task file) and return a task.
@@ -55,14 +63,15 @@ def _task_from_taskline(taskline):
         return None
     elif '|' in taskline:
         text, _, meta = taskline.rpartition('|')
-        task = { 'text': text.strip() }
+        task = {'text': text.strip()}
         for piece in meta.strip().split(','):
             label, data = piece.split(':')
             task[label.strip()] = data.strip()
     else:
         text = taskline.strip()
-        task = { 'id': _hash(text), 'text': text }
+        task = {'id': _hash(text), 'text': text}
     return task
+
 
 def _tasklines_from_tasks(tasks):
     """Parse a list of tasks into tasklines suitable for writing."""
@@ -75,6 +84,7 @@ def _tasklines_from_tasks(tasks):
         tasklines.append('%s | %s\n' % (task['text'], meta_str))
 
     return tasklines
+
 
 def _prefixes(ids):
     """Return a mapping of ids to prefixes in O(n) time.
@@ -91,7 +101,7 @@ def _prefixes(ids):
         for i in range(1, id_len+1):
             # identifies an empty prefix slot, or a singular collision
             prefix = id[:i]
-            if (not prefix in ps) or (ps[prefix] and prefix != ps[prefix]):
+            if (prefix not in ps) or (ps[prefix] and prefix != ps[prefix]):
                 break
         if prefix in ps:
             # if there is a collision
@@ -205,7 +215,6 @@ class TaskDict(object):
         """
         self.tasks.pop(self[prefix]['id'])
 
-
     def print_list(self, kind='tasks', verbose=False, quiet=False, grep=''):
         """Print out a nicely formatted list of unfinished tasks."""
         tasks = dict(getattr(self, kind).items())
@@ -242,8 +251,11 @@ def _build_parser():
     usage = "Usage: %prog [-t DIR] [-l LIST] [options] [TEXT]"
     parser = OptionParser(usage=usage)
 
-    actions = OptionGroup(parser, "Actions",
-        "If no actions are specified the TEXT will be added as a new task.")
+    actions = OptionGroup(
+        parser,
+        "Actions",
+        "If no actions are specified the TEXT will be added as a new task."
+    )
     actions.add_option("-e", "--edit", dest="edit", default="",
                        help="edit TASK to contain TEXT", metavar="TASK")
     actions.add_option("-f", "--finish", dest="finish",
@@ -264,7 +276,8 @@ def _build_parser():
 
     output = OptionGroup(parser, "Output Options")
     output.add_option("-g", "--grep", dest="grep", default='',
-                      help="print only tasks that contain WORD", metavar="WORD")
+                      help="print only tasks that contain WORD",
+                      metavar="WORD")
     output.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=False,
                       help="print more detailed output (full task ids, etc)")
@@ -277,6 +290,7 @@ def _build_parser():
     parser.add_option_group(output)
 
     return parser
+
 
 def _main():
     """Run the command-line interface."""
@@ -300,8 +314,11 @@ def _main():
             td.write(options.delete)
         else:
             kind = 'tasks' if not options.done else 'done'
-            td.print_list(kind=kind, verbose=options.verbose, quiet=options.quiet,
-                          grep=options.grep)
+            td.print_list(
+                kind=kind,
+                verbose=options.verbose,
+                quiet=options.quiet,
+                grep=options.grep)
     except AmbiguousPrefix, e:
         sys.stderr.write('The ID "%s" matches more than one task.\n' % e.prefix)
     except UnknownPrefix, e:
