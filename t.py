@@ -25,6 +25,13 @@ class UnknownPrefix(Exception):
         super(UnknownPrefix, self).__init__()
         self.prefix = prefix
 
+class BadFile(Exception):
+    """Raised when something else goes wrong trying to work with the task file."""
+    def __init__(self, path, problem):
+        super(BadFile, self).__init__()
+        self.path = path
+        self.problem = problem
+
 
 def _hash(text):
     """Return a hash of the given text for use as an id.
@@ -134,12 +141,15 @@ class TaskDict(object):
             if os.path.isdir(path):
                 raise InvalidTaskfile
             if os.path.exists(path):
-                with open(path, 'r') as tfile:
-                    tls = [tl.strip() for tl in tfile if tl]
-                    tasks = map(_task_from_taskline, tls)
-                    for task in tasks:
-                        if task is not None:
-                            getattr(self, kind)[task['id']] = task
+                try:
+                    with open(path, 'r') as tfile:
+                        tls = [tl.strip() for tl in tfile if tl]
+                        tasks = map(_task_from_taskline, tls)
+                        for task in tasks:
+                            if task is not None:
+                                getattr(self, kind)[task['id']] = task
+                except IOError as e:
+                    raise BadFile(path, e.strerror)
 
     def __getitem__(self, prefix):
         """Return the unfinished task with the given prefix.
@@ -230,9 +240,13 @@ class TaskDict(object):
                 raise InvalidTaskfile
             tasks = sorted(getattr(self, kind).values(), key=itemgetter('id'))
             if tasks or not delete_if_empty:
-                with open(path, 'w') as tfile:
-                    for taskline in _tasklines_from_tasks(tasks):
-                        tfile.write(taskline)
+                try:
+                    with open(path, 'w') as tfile:
+                        for taskline in _tasklines_from_tasks(tasks):
+                            tfile.write(taskline)
+                except IOError as e:
+                    raise BadFile(path, e.strerror)
+
             elif not tasks and os.path.isfile(path):
                 os.remove(path)
 
@@ -308,6 +322,8 @@ def _main():
     except UnknownPrefix:
         e = sys.exc_info()[1]
         sys.stderr.write('The ID "%s" does not match any task.\n' % e.prefix)
+    except BadFile, e:
+        sys.stderr.write('%s - %s\n' % (e.problem, e.path))
 
 
 if __name__ == '__main__':
