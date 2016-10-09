@@ -2,7 +2,7 @@
 
 """t is for people that want do things, not organize their tasks."""
 
-from __future__ import with_statement
+from __future__ import with_statement, print_function
 
 import os, re, sys, hashlib
 from operator import itemgetter
@@ -229,7 +229,7 @@ class TaskDict(object):
         for _, task in sorted(tasks.items()):
             if grep.lower() in task['text'].lower():
                 p = '%s - ' % task[label].ljust(plen) if not quiet else ''
-                print (p + task['text'])
+                print(p + task['text'])
 
     def write(self, delete_if_empty=False):
         """Flush the finished and unfinished tasks to the files on disk."""
@@ -322,7 +322,7 @@ def _main():
     except UnknownPrefix:
         e = sys.exc_info()[1]
         sys.stderr.write('The ID "%s" does not match any task.\n' % e.prefix)
-    except BadFile, e:
+    except BadFile as e:
         sys.stderr.write('%s - %s\n' % (e.problem, e.path))
 
 
