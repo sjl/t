@@ -270,6 +270,9 @@ def _build_parser():
     config = OptionGroup(parser, "Configuration Options")
     config.add_option("-l", "--list", dest="name", default="tasks",
                       help="work on LIST", metavar="LIST")
+    config.add_option("-u", "--vcs-rooted",
+                      action="store_true", dest="vcsrooted", default=False,
+                      help="determine list directory from version-control root")
     config.add_option("-t", "--task-dir", dest="taskdir", default="",
                       help="work on the lists in DIR", metavar="DIR")
     config.add_option("-d", "--delete-if-empty",
@@ -296,6 +299,27 @@ def _build_parser():
 def _main():
     """Run the command-line interface."""
     (options, args) = _build_parser().parse_args()
+
+    if options.vcsrooted:
+        # VCS list inspired by ack: http://beyondgrep.com/ack-2.14-single-file
+        vcsroots = re.compile("^(\.(bzr|git|hg|svn)|(_(darcs|sgbak))|CVS|RCS|SCCS)$")
+
+        root = os.path.abspath(os.sep)
+        options.taskdir = os.path.abspath('.')
+        while options.taskdir is not root:
+            found = False
+            for f in os.listdir(options.taskdir):
+                if vcsroots.match(os.path.basename(f)) is not None:
+                    found = True
+                    break
+
+            if found:
+                break
+            options.taskdir = os.path.abspath(os.path.join(options.taskdir, '..'))
+
+        if options.taskdir is root:
+            sys.stderr.write('The current directory is not under version control.\n')
+            return
 
     td = TaskDict(taskdir=options.taskdir, name=options.name)
     text = ' '.join(args).strip()
