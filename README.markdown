@@ -173,7 +173,7 @@ Counting your tasks is simple using the `wc` program:
 
 Want a count of your tasks right in your prompt?  Edit your `~/.bashrc` file:
 
-    export PS1="[$(t | wc -l | sed -e's/ *//')] $PS1"
+    export PS1='[$(t | wc -l | sed -e"s/ *//")]'" $PS1"
 
 Now you've got a prompt that looks something like this:
 
