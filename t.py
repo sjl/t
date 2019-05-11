@@ -7,6 +7,7 @@ from __future__ import with_statement, print_function
 import os, re, sys, hashlib
 from operator import itemgetter
 from optparse import OptionParser, OptionGroup
+from re import split as re_split
 
 
 class InvalidTaskfile(Exception):
@@ -195,27 +196,28 @@ class TaskDict(object):
         task['text'] = text
         task['id'] = _hash(text)
 
-    def finish_task(self, prefix):
-        """Mark the task with the given prefix as finished.
+    def finish_task(self, prefix_list):
+        """Mark tasks with the given prefix as finished.
 
         If more than one task matches the prefix an AmbiguousPrefix exception
         will be raised, if no tasks match it an UnknownPrefix exception will
         be raised.
 
         """
-        task = self.tasks.pop(self[prefix]['id'])
-        self.done[task['id']] = task
+        for prefix in re_split(",", prefix_list):
+            task = self.tasks.pop(self[prefix]['id'])
+            self.done[task['id']] = task
 
-    def remove_task(self, prefix):
-        """Remove the task from tasks list.
+    def remove_task(self, prefix_list):
+        """Remove tasks from tasks list.
 
         If more than one task matches the prefix an AmbiguousPrefix exception
         will be raised, if no tasks match it an UnknownPrefix exception will
         be raised.
 
         """
-        self.tasks.pop(self[prefix]['id'])
-
+        for prefix in re_split(",", prefix_list):
+            self.tasks.pop(self[prefix]['id'])
 
     def print_list(self, kind='tasks', verbose=False, quiet=False, grep=''):
         """Print out a nicely formatted list of unfinished tasks."""
