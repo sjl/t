@@ -264,9 +264,9 @@ def _build_parser():
     actions.add_option("-e", "--edit", dest="edit", default="",
                        help="edit TASK to contain TEXT", metavar="TASK")
     actions.add_option("-f", "--finish", dest="finish",
-                       help="mark TASK as finished", metavar="TASK")
+                       help="mark TASK (t -f ID) or TASKS (t -f ID,ID) as finished", metavar="TASK")
     actions.add_option("-r", "--remove", dest="remove",
-                       help="Remove TASK from list", metavar="TASK")
+                       help="Remove TASK (t -r ID) or TASKS (t -r ID,ID) from list", metavar="TASK")
     parser.add_option_group(actions)
 
     config = OptionGroup(parser, "Configuration Options")
