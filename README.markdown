@@ -75,10 +75,8 @@ works well).  It works on Linux, OS X, and Windows (with [Cygwin][]).
 
 Installing and setting up `t` will take about one minute.
 
-First, [download][] the newest version or clone the Mercurial repository
-(`hg clone http://bitbucket.org/sjl/t/`).  Put it anywhere you like.
-
-[download]: http://bitbucket.org/sjl/t/get/tip.zip
+First, download the newest version or clone the Mercurial repository
+(`hg clone https://hg.sr.ht/~sjl/t/`).  Put it anywhere you like.
 
 Next, decide where you want to keep your todo lists.  I put mine in `~/tasks`.
 Create that directory:
@@ -219,8 +217,8 @@ be simple.  If you need anything beyond the basics you might want to look at
 bells and whistles.
 
 If you want to contribute code to `t`, that's great!  Fork the
-[Mercurial repository][] on BitBucket or the [git mirror][] on GitHub and send me
+[Mercurial repository][] on Source Hut or the [git mirror][] on GitHub and send me
 a pull request.
 
-[Mercurial repository]: http://bitbucket.org/sjl/t/
+[Mercurial repository]: https://hg.sr.ht/~sjl/t/
 [git mirror]: http://github.com/sjl/t/
