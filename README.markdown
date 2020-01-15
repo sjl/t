@@ -76,7 +76,7 @@ works well).  It works on Linux, OS X, and Windows (with [Cygwin][]).
 Installing and setting up `t` will take about one minute.
 
 First, download the newest version or clone the Mercurial repository
-(`hg clone https://hg.sr.ht/~sjl/t/`).  Put it anywhere you like.
+(`hg clone https://hg.stevelosh.com/t/`).  Put it anywhere you like.
 
 Next, decide where you want to keep your todo lists.  I put mine in `~/tasks`.
 Create that directory:
@@ -216,9 +216,9 @@ be simple.  If you need anything beyond the basics you might want to look at
 [todo.txt][] or [TaskWarrior][] instead.  They're great tools with lots of
 bells and whistles.
 
-If you want to contribute code to `t`, that's great!  Fork the
-[Mercurial repository][] on Source Hut or the [git mirror][] on GitHub and send me
-a pull request.
+If you want to contribute code to `t`, that's great!  Get the [Mercurial
+repository][] or the [git mirror][] on GitHub and send me a patch or pull
+request.
 
-[Mercurial repository]: https://hg.sr.ht/~sjl/t/
+[Mercurial repository]: https://hg.stevelosh.com/t/
 [git mirror]: http://github.com/sjl/t/
