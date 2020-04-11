@@ -252,6 +252,10 @@ class TaskDict(object):
                 os.remove(path)
 
 
+def _die(message):
+    sys.stderr.write('error: %s\n' % message)
+    sys.exit(1)
+
 def _build_parser():
     """Return a parser for the command-line interface."""
     usage = "Usage: %prog [-t DIR] [-l LIST] [options] [TEXT]"
@@ -300,6 +304,9 @@ def _main():
     td = TaskDict(taskdir=options.taskdir, name=options.name)
     text = ' '.join(args).strip()
 
+    if '\n' in text:
+        _die('task text cannot contain newlines')
+
     try:
         if options.finish:
             td.finish_task(options.finish)
@@ -319,12 +326,12 @@ def _main():
                           grep=options.grep)
     except AmbiguousPrefix:
         e = sys.exc_info()[1]
-        sys.stderr.write('The ID "%s" matches more than one task.\n' % e.prefix)
+        _die('the ID "%s" matches more than one task' % e.prefix)
     except UnknownPrefix:
         e = sys.exc_info()[1]
-        sys.stderr.write('The ID "%s" does not match any task.\n' % e.prefix)
+        _die('the ID "%s" does not match any task' % e.prefix)
     except BadFile as e:
-        sys.stderr.write('%s - %s\n' % (e.problem, e.path))
+        _die('%s - %s' % (e.problem, e.path))
 
 
 if __name__ == '__main__':
