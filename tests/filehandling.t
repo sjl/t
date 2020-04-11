@@ -12,6 +12,7 @@ Add a task file:
   .
   ..
   $ xt Sample.
+  a
   $ ls -a
   .
   ..
@@ -30,6 +31,7 @@ Finish a task without deleting:
 Finish a task with deleting:
 
   $ xt Another.
+  c
   $ xt --delete-if-empty -f c
   $ ls -a
   .

@@ -5,10 +5,15 @@ Setup:
 Add some tasks:
 
   $ xt Sample one.
+  3
   $ xt Sample two.
+  7
   $ xt Sample three.
+  9
   $ xt Sample four.
+  1
   $ xt 'this | that'
+  4
 
 Finish and test .test.done:
 

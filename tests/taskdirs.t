@@ -7,7 +7,9 @@ Initialize multiple task directories:
   $ mkdir beer
   $ mkdir books
   $ xt --task-dir beer Dogfish Head 120 minute IPA
+  7
   $ xt --task-dir books Your Inner Fish
+  0
   $ xt --task-dir beer
   7 - Dogfish Head 120 minute IPA
   $ xt --task-dir books

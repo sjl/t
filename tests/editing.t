@@ -5,12 +5,14 @@ Setup:
 Replace a task's text (preserving the ID):
 
   $ xt Sample.
+  a
   $ xt
   a - Sample.
   $ xt -e a New sample.
   $ xt
   d - New sample.
   $ xt 'this | that'
+  4
   $ xt
   4 - this | that
   d - New sample.

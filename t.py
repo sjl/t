@@ -172,13 +172,17 @@ class TaskDict(object):
             else:
                 raise AmbiguousPrefix(prefix)
 
-    def add_task(self, text):
+    def add_task(self, text, verbose, quiet):
         """Add a new, unfinished task with the given summary text."""
         task_id = _hash(text)
         self.tasks[task_id] = {'id': task_id, 'text': text}
 
-        prefixes = _prefixes(self.tasks)
-        print(prefixes[task_id])
+        if not quiet:
+            if verbose:
+                print(task_id)
+            else:
+                prefixes = _prefixes(self.tasks)
+                print(prefixes[task_id])
 
     def edit_task(self, prefix, text):
         """Edit the task with the given prefix.
@@ -321,7 +325,7 @@ def _main():
             td.edit_task(options.edit, text)
             td.write(options.delete)
         elif text:
-            td.add_task(text)
+            td.add_task(text, verbose=options.verbose, quiet=options.quiet)
             td.write(options.delete)
         else:
             kind = 'tasks' if not options.done else 'done'

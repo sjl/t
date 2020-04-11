@@ -5,7 +5,9 @@ Setup:
 Add tasks of varying width:
 
   $ xt Short.
+  5
   $ xt Longcat is long.
+  4
 
 Test paddings:
 
