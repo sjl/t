@@ -165,12 +165,10 @@ class TaskDict(object):
             return self.tasks[matched[0]]
         elif len(matched) == 0:
             raise UnknownPrefix(prefix)
+        elif prefix in matched:
+            return self.tasks[prefix]
         else:
-            matched = [tid for tid in self.tasks.keys() if tid == prefix]
-            if len(matched) == 1:
-                return self.tasks[matched[0]]
-            else:
-                raise AmbiguousPrefix(prefix)
+            raise AmbiguousPrefix(prefix)
 
     def add_task(self, text, verbose, quiet):
         """Add a new, unfinished task with the given summary text."""
