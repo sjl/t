@@ -103,6 +103,7 @@ To add a task, use `t [task description]`:
     $ t Clean the apartment.
     $ t Write chapter 10 of the novel.
     $ t Buy more beer.
+    $ t Write some code
     $
 
 ### List Your Tasks
@@ -113,6 +114,7 @@ Listing your tasks is even easier -- just use `t`:
     9  - Buy more beer.
     30 - Clean the apartment.
     31 - Write chapter 10 of the novel.
+    e  - Write some code
     $
 
 `t` will list all of your unfinished tasks and their IDs.
@@ -125,6 +127,10 @@ After you're done with something, use `t -f ID` to finish it:
     $ t
     9  - Buy more beer.
     30 - Clean the apartment.
+    e  - Write some code
+    $ t -f 9,30
+    $ t
+    e - Write some code
     $
 
 ### Edit a Task
