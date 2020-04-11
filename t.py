@@ -177,6 +177,7 @@ class TaskDict(object):
         task_id = _hash(text)
         self.tasks[task_id] = {'id': task_id, 'text': text}
 
+
     def edit_task(self, prefix, text):
         """Edit the task with the given prefix.
 
