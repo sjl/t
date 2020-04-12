@@ -78,6 +78,13 @@ Installing and setting up `t` will take about one minute.
 First, download the newest version or clone the Mercurial repository
 (`hg clone https://hg.stevelosh.com/t/`).  Put it anywhere you like.
 
+Alternatively, install it with pip:
+
+    pip3 install --user hg+http://hg.stevelosh.com/t
+
+Configuring t
+-------------
+
 Next, decide where you want to keep your todo lists.  I put mine in `~/tasks`.
 Create that directory:
 
