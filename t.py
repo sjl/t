@@ -231,11 +231,21 @@ class TaskDict(object):
             for task_id, prefix in _prefixes(tasks).items():
                 tasks[task_id]['prefix'] = prefix
 
+        out = []
+
         plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
         for _, task in sorted(tasks.items()):
             if grep.lower() in task['text'].lower():
-                p = '%s - ' % task[label].ljust(plen) if not quiet else ''
-                print(p + task['text'])
+                p = '%s' % task[label].ljust(plen) if not quiet else ''
+                p = p.strip()
+                p = ' ['+p+']'
+                #print(p + task['text'])
+                out.append(task['text']+p)
+
+        print(f't.py -> {len(out)} tasks!')
+        print()
+        for line in sorted(out): print(line)
+        print()
 
     def write(self, delete_if_empty=False):
         """Flush the finished and unfinished tasks to the files on disk."""
