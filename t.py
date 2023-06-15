@@ -160,6 +160,8 @@ class TaskDict(object):
         If no tasks match the prefix an UnknownPrefix exception will be raised.
 
         """
+
+        prefix = prefix.strip().lower()
         matched = [tid for tid in self.tasks.keys() if tid.startswith(prefix)]
         if len(matched) == 1:
             return self.tasks[matched[0]]
