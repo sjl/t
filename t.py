@@ -95,7 +95,7 @@ def _prefixes(ids):
     ps = {}
     for id in ids:
         id_len = len(id)
-        for i in range(1, id_len+1):
+        for i in range(3, id_len+1):
             # identifies an empty prefix slot, or a singular collision
             prefix = id[:i]
             if (not prefix in ps) or (ps[prefix] and prefix != ps[prefix]):
