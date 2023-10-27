@@ -1,7 +1,7 @@
 t
 =======
 
-`t` is a command-line todo list manager for people that want to *finish* tasks,
+`t` is a command-line todo list manager for people who to *finish* tasks,
 not organize them.
 
 
